@@ -20,8 +20,19 @@ WORKDIR /app
 # Copy the jar from the builder stage
 COPY --from=builder /app/target/springboot-k8s-mysql-0.0.1-SNAPSHOT.jar app.jar
 
+COPY opentelemetry-javaagent.jar opentelemetry-javaagent.jar
+
 # Expose port (optional, adjust if needed)
 EXPOSE 8080
 
 # Command to run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+#ENTRYPOINT ["java", "-jar", "app.jar"]
+
+ENTRYPOINT ["java", \
+            "-javaagent:/app/opentelemetry-javaagent.jar", \
+            "-Dotel.javaagent.enabled=true", \
+            "-Dotel.exporter.otlp.endpoint=http://<COLLECTOR_HOST>:<COLLECTOR_PORT>", \
+            "-Dotel.service.name=my-spring-boot-app", \
+            "-jar", "/app/app.jar"]
+
+
