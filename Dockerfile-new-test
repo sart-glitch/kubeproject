@@ -31,8 +31,8 @@ EXPOSE 8080
 ENTRYPOINT ["java", \
             "-javaagent:/app/opentelemetry-javaagent.jar", \
             "-Dotel.javaagent.enabled=true", \
-            "-Dotel.exporter.otlp.endpoint=http://<COLLECTOR_HOST>:<COLLECTOR_PORT>", \
+            "-Dotel.exporter.otlp.endpoint=http://signoz-otel-collector.signoz.svc.cluster.local:4317", \
             "-Dotel.service.name=my-spring-boot-app", \
-            "-jar", "/app/app.jar"]
+            "-jar", "app.jar"]
 
 
